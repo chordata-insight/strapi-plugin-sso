@@ -112,6 +112,11 @@ async function keycloakSignInCallback(ctx) {
       }
       // Register a new account
       const keycloakRoles = await roleService.keycloakRoles();
+      console.log('----------------------roles-start----------------------');
+      console.log(keycloakRoles?.roles);
+      console.log(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE, KEYCLOAK_STRAPI_EDITOR_ROLE, KEYCLOAK_STRAPI_AUTHOR_ROLE);
+      console.log(userResponse.data.roles);
+      console.log('----------------------roles-end----------------------');
       const roles = (
         keycloakRoles && keycloakRoles['roles']
           ? keycloakRoles['roles'].map((role) => {
