@@ -3,7 +3,16 @@ const { v4 } = require('uuid');
 const { getService } = require('@strapi/admin/server/utils');
 
 const configValidation = () => {
-  const requiredConfig = ['KEYCLOAK_DOMAIN', 'KEYCLOAK_REALM', 'KEYCLOAK_CLIENT_ID', 'KEYCLOAK_CLIENT_SECRET', 'KEYCLOAK_REDIRECT_URI'];
+  const requiredConfig = [
+    'KEYCLOAK_DOMAIN',
+    'KEYCLOAK_REALM',
+    'KEYCLOAK_CLIENT_ID',
+    'KEYCLOAK_CLIENT_SECRET',
+    'KEYCLOAK_REDIRECT_URI',
+    'KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE',
+    'KEYCLOAK_STRAPI_EDITOR_ROLE',
+    'KEYCLOAK_STRAPI_AUTHOR_ROLE',
+  ];
   const missingConfigs = [];
   const config = strapi.config.get('plugin.strapi-plugin-sso');
   requiredConfig.forEach((key) => {
@@ -89,11 +98,16 @@ async function keycloakSignInCallback(ctx) {
 
     const email = userResponse.data.email;
 
+    if (
+      !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE) &&
+      !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_EDITOR_ROLE) &&
+      !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_AUTHOR_ROLE)
+    ) {
+      return ctx.send(oauthService.renderSignUpError(`You are not allowed to access this site`));
+    }
+
     const dbUser = await userService.findOneByEmail(email);
-    console.log('----------------------dbuser---------------------s-');
-    console.log(userResponse.data);
-    console.log(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE, KEYCLOAK_STRAPI_EDITOR_ROLE, KEYCLOAK_STRAPI_AUTHOR_ROLE);
-    console.log('----------------------dbuser---------------------e-');
+
     let activateUser;
     let jwtToken;
 
@@ -106,21 +120,9 @@ async function keycloakSignInCallback(ctx) {
       if (!isEmailVerified) {
         return ctx.send(oauthService.renderSignUpError(`Email ${email} is not verified`));
       }
-
-      if (
-        !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE) &&
-        !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_EDITOR_ROLE) &&
-        !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_AUTHOR_ROLE)
-      ) {
-        return ctx.send(oauthService.renderSignUpError(`You are not allowed to access this site`));
-      }
       // Register a new account
       const keycloakRoles = await roleService.keycloakRoles();
-      console.log('----------------------roles-start----------------------');
-      console.log(keycloakRoles?.roles);
-      console.log(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE, KEYCLOAK_STRAPI_EDITOR_ROLE, KEYCLOAK_STRAPI_AUTHOR_ROLE);
-      console.log(userResponse.data.roles);
-      console.log('----------------------roles-end----------------------');
+
       const roles = (
         keycloakRoles && keycloakRoles['roles']
           ? keycloakRoles['roles'].map((role) => {
