@@ -90,6 +90,9 @@ async function keycloakSignInCallback(ctx) {
     const email = userResponse.data.email;
 
     const dbUser = await userService.findOneByEmail(email);
+    console.log('----------------------dbuser---------------------s-');
+    console.log(userResponse.data);
+    console.log('----------------------dbuser---------------------e-');
     let activateUser;
     let jwtToken;
 
