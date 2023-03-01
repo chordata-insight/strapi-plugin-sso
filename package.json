@@ -1,6 +1,6 @@
 {
   "name": "@chordata-insight/strapi-plugin-sso",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Plug-in for single sign-on with Strapi 4",
   "strapi": {
     "displayName": "Strapi Plugin SSO",
