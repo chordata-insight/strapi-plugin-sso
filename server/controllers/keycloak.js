@@ -92,6 +92,7 @@ async function keycloakSignInCallback(ctx) {
     const dbUser = await userService.findOneByEmail(email);
     console.log('----------------------dbuser---------------------s-');
     console.log(userResponse.data);
+    console.log(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE, KEYCLOAK_STRAPI_EDITOR_ROLE, KEYCLOAK_STRAPI_AUTHOR_ROLE);
     console.log('----------------------dbuser---------------------e-');
     let activateUser;
     let jwtToken;
