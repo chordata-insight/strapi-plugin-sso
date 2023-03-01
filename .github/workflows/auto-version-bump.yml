@@ -1,4 +1,4 @@
-name: auto version bump for platform-shared
+name: auto version bump for sso plugin
 on:
   push:
     branches:
