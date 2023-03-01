@@ -3,16 +3,7 @@ const { v4 } = require('uuid');
 const { getService } = require('@strapi/admin/server/utils');
 
 const configValidation = () => {
-  const requiredConfig = [
-    'KEYCLOAK_DOMAIN',
-    'KEYCLOAK_REALM',
-    'KEYCLOAK_CLIENT_ID',
-    'KEYCLOAK_CLIENT_SECRET',
-    'KEYCLOAK_REDIRECT_URI',
-    'KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE',
-    'KEYCLOAK_STRAPI_EDITOR_ROLE',
-    'KEYCLOAK_STRAPI_AUTHOR_ROLE',
-  ];
+  const requiredConfig = ['KEYCLOAK_DOMAIN', 'KEYCLOAK_REALM', 'KEYCLOAK_CLIENT_ID', 'KEYCLOAK_CLIENT_SECRET', 'KEYCLOAK_REDIRECT_URI'];
   const missingConfigs = [];
   const config = strapi.config.get('plugin.strapi-plugin-sso');
   requiredConfig.forEach((key) => {
@@ -33,9 +24,9 @@ const configValidation = () => {
     OAUTH_GRANT_TYPE: 'authorization_code',
     OAUTH_RESPONSE_TYPE: 'code',
     OAUTH_SCOPE: 'openid profile',
-    KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE: config.KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE,
-    KEYCLOAK_STRAPI_EDITOR_ROLE: config.KEYCLOAK_STRAPI_EDITOR_ROLE,
-    KEYCLOAK_STRAPI_AUTHOR_ROLE: config.KEYCLOAK_STRAPI_AUTHOR_ROLE,
+    KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE: config.KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE || 'strapi.super-admin',
+    KEYCLOAK_STRAPI_EDITOR_ROLE: config.KEYCLOAK_STRAPI_EDITOR_ROLE || 'strapi.editor',
+    KEYCLOAK_STRAPI_AUTHOR_ROLE: config.KEYCLOAK_STRAPI_AUTHOR_ROLE || 'strapi.author',
   };
 };
 
