@@ -1,0 +1,64 @@
+{
+  "name": "strapi-plugin-sso",
+  "version": "1.2.0",
+  "description": "Plug-in for single sign-on with Strapi 4",
+  "strapi": {
+    "displayName": "Strapi Plugin SSO",
+    "name": "strapi-plugin-sso",
+    "description": "Enables single sign-on for strapi v4.x",
+    "kind": "plugin"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint"
+  },
+  "keywords": [
+    "strapi",
+    "plugin",
+    "oauth",
+    "SSO",
+    "Keycloak"
+  ],
+  "peerDependencies": {
+    "@strapi/strapi": "4.x"
+  },
+  "dependencies": {
+    "@strapi/helper-plugin": "4.7.0",
+    "generate-password": "^1.7.0"
+  },
+  "author": {
+    "name": "dvarcode",
+    "url": "https://github.com/chordata-insight/strapi-plugin-sso"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chordata-insight/strapi-plugin-sso"
+  },
+  "bugs": {
+    "url": "https://github.com/chordata-insight/strapi-plugin-sso/issues"
+  },
+  "maintainers": [
+    {
+      "name": "dvarcode"
+    }
+  ],
+  "engines": {
+    "node": ">=14.x.x <=17.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.28.0",
+    "jest": "^29.3.1",
+    "prettier": "^2.7.1"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      ".tmp",
+      ".cache"
+    ],
+    "testEnvironment": "node"
+  }
+}

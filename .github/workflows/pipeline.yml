@@ -1,0 +1,31 @@
+name: build and publish to npm
+on:
+  push:
+    branches:
+      - '!*'
+      - 'main'
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    if: "contains(github.event.head_commit.message, 'version bump')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: configure git
+        run: |
+          git config --global url."https://${{ secrets.GH_PAT }}:x-oauth-basic@github.com/chordata-insight".insteadOf "https://github.com/chordata-insight"
+          git config --global url."https://${{ secrets.GH_PAT }}:x-oauth-basic@github.com/chordata-insight".insteadOf "ssh://git@github.com/chordata-insight"
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PAT }}" >> .npmrc
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@chordata-insight'
+
+      - run: yarn --frozen-lockfile --silent
+      - run: yarn build
+      - run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PAT }}
