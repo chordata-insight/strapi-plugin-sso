@@ -97,6 +97,11 @@ async function keycloakSignInCallback(ctx) {
       return ctx.send(oauthService.renderSignUpError(`You are not allowed to access this site`));
     }
 
+    console.log('----------------------s----------------------');
+    console.log('userResponse.data', userResponse.data.roles);
+    console.log(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE, KEYCLOAK_STRAPI_EDITOR_ROLE, KEYCLOAK_STRAPI_AUTHOR_ROLE);
+    console.log('-----------------------e---------------------');
+
     const dbUser = await userService.findOneByEmail(email);
 
     let activateUser;
@@ -116,7 +121,10 @@ async function keycloakSignInCallback(ctx) {
 
       const roles = (
         keycloakRoles && keycloakRoles['roles']
-          ? keycloakRoles['roles'].map((role) => {
+          ? keycloakRoles['roles'].map((role, index) => {
+              console.log('role', role, index, !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE));
+              console.log('role', role, index, !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_EDITOR_ROLE));
+              console.log('role', role, index, !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_AUTHOR_ROLE));
               if (role === 1 && !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE)) {
                 return null;
               }
@@ -132,6 +140,7 @@ async function keycloakSignInCallback(ctx) {
             })
           : []
       ).filter(Boolean);
+      console.log('----------------------overall----------------------', roles);
 
       const defaultLocale = oauthService.localeFindByHeader(ctx.request.headers);
       activateUser = await oauthService.createUser(email, userResponse.data.family_name, userResponse.data.given_name, defaultLocale, roles);
