@@ -117,13 +117,13 @@ async function keycloakSignInCallback(ctx) {
       const roles = (
         keycloakRoles && keycloakRoles['roles']
           ? keycloakRoles['roles'].map((role) => {
-              if (role === 1 && userResponse.data.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE)) {
+              if (role === 1 && !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_SUPER_ADMIN_ROLE)) {
                 return null;
               }
-              if (role === 2 && userResponse.data.roles?.includes(KEYCLOAK_STRAPI_EDITOR_ROLE)) {
+              if (role === 2 && !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_EDITOR_ROLE)) {
                 return null;
               }
-              if (role === 3 && userResponse.data.roles?.includes(KEYCLOAK_STRAPI_AUTHOR_ROLE)) {
+              if (role === 3 && !userResponse.data.roles?.includes(KEYCLOAK_STRAPI_AUTHOR_ROLE)) {
                 return null;
               }
               return {
